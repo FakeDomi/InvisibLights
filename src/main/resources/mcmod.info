@@ -1,0 +1,16 @@
+[
+{
+  "modid": "InvisibLights",
+  "name": "InvisibLights",
+  "description": "Convenient invisible lights system for Minecraft.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["domi1819"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
