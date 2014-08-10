@@ -1,2 +1,3 @@
 tile.blockLightSource.name=Light Source
-item.itemLightRod.name=Light Manipulation Rod
+item.itemLightRod.name=Rod of Light
+item.itemDarkRod.name=Rod of Darkness

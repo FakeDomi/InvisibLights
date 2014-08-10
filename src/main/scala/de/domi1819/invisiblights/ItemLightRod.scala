@@ -11,7 +11,7 @@ class ItemLightRod extends Item
 {
   setCreativeTab(CreativeTabs.tabTools)
   setMaxStackSize(1)
-  setFull3D()
+  setFull3D
   setUnlocalizedName("itemLightRod")
   setTextureName("invisiblights:rod")
 

@@ -20,6 +20,7 @@ class BlockLightSource extends Block(Material.circuits)
   setCreativeTab(CreativeTabs.tabRedstone)
   setBlockName("blockLightSource")
   setBlockTextureName("invisiblights:light")
+  setBlockUnbreakable
 
   override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
   {
@@ -39,13 +40,11 @@ class BlockLightSource extends Block(Material.circuits)
     null
   }
 
-  override def isAir(world: IBlockAccess, x: Int, y: Int, z: Int): Boolean = true
-
   override def getItemDropped(i: Int, random: Random, j: Int): Item = Items.glowstone_dust
 
   override def getRenderBlockPass: Int = 1
 
-  override def quantityDropped(rand: Random): Int = rand.nextInt(2)
+  override def quantityDropped(rand: Random): Int = 0
 
   override def isOpaqueCube: Boolean = false
 
