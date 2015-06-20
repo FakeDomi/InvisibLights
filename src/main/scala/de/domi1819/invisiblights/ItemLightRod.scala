@@ -2,7 +2,7 @@ package de.domi1819.invisiblights
 
 import net.minecraft.client.Minecraft
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
 import net.minecraft.init.Items
 import net.minecraft.item.{ItemStack, Item}
 import net.minecraft.world.World
@@ -49,13 +49,13 @@ class ItemLightRod extends Item
     if (side == 4) aX = x - 1
     if (side == 5) aX = x + 1
 
-    if ((player.capabilities.isCreativeMode || player.inventory.hasItem(Items.glowstone_dust)) && world.canPlaceEntityOnSide(InvisibLights.blockLightSource, aX, aY, aZ, false, side, player, stack))
+    if ((player.capabilities.isCreativeMode || getItemCount(player.inventory, Items.glowstone_dust) >= InvisibLights.glowstoneMinCost) && world.canPlaceEntityOnSide(InvisibLights.blockLightSource, aX, aY, aZ, false, side, player, stack))
     {
       val meta = InvisibLights.blockLightSource.onBlockPlaced(world, aX, aY, aZ, side, hitX, hitY, hitZ, 0)
       if (placeBlockAt(stack, player, world, aX, aY, aZ, hitX, hitY, hitZ, meta))
       {
         world.playSoundEffect(aX + 0.5F, aY + 0.5F, aZ + 0.5F, InvisibLights.blockLightSource.stepSound.getBreakSound, 1, InvisibLights.blockLightSource.stepSound.getPitch * 0.8F)
-        if (!player.capabilities.isCreativeMode && player.inventory.consumeInventoryItem(Items.glowstone_dust)) player.inventory.consumeInventoryItem(Items.glowstone_dust)
+        if (!player.capabilities.isCreativeMode) removeItems(player.inventory, Items.glowstone_dust, InvisibLights.glowstoneMaxCost)
         player.inventory.inventoryChanged
         if (!world.isRemote) return true
       }
@@ -75,5 +75,43 @@ class ItemLightRod extends Item
     }
 
     true
+  }
+
+  def getItemCount(inv: InventoryPlayer, item: Item): Int =
+  {
+    var count = 0
+
+    for (stack <- inv.mainInventory)
+      if (stack != null && stack.getItem == item) count += stack.stackSize
+
+    count
+  }
+
+  def removeItems(inv: InventoryPlayer, item: Item, count: Int)
+  {
+    var itemsLeft = count
+
+    for (i <- 0 until inv.mainInventory.length)
+    {
+      val stack = inv.mainInventory(i)
+      if (itemsLeft > 0 && stack != null && stack.getItem == item)
+      {
+        if (itemsLeft == stack.stackSize)
+        {
+          itemsLeft = 0
+          inv.mainInventory(i) = null
+        }
+        else if (itemsLeft < stack.stackSize)
+        {
+          stack.stackSize -= itemsLeft
+          itemsLeft = 0
+        }
+        else
+        {
+          itemsLeft -= stack.stackSize
+          inv.mainInventory(i) = null
+        }
+      }
+    }
   }
 }

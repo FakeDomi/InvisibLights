@@ -40,6 +40,8 @@ class BlockLightSource extends Block(Material.circuits)
     null
   }
 
+  override def isReplaceable(world: IBlockAccess, x: Int, y: Int, z: Int): Boolean = true
+
   override def getItemDropped(i: Int, random: Random, j: Int): Item = Items.glowstone_dust
 
   override def getRenderBlockPass: Int = 1
