@@ -1,4 +1,4 @@
-package de.domi1819.invisiblights
+package net.domi1819.invisiblights
 
 import net.minecraft.client.Minecraft
 import net.minecraft.creativetab.CreativeTabs
@@ -11,7 +11,7 @@ class ItemLightRod extends Item
 {
   setCreativeTab(CreativeTabs.tabTools)
   setMaxStackSize(1)
-  setFull3D
+  setFull3D()
   setUnlocalizedName("itemLightRod")
   setTextureName("invisiblights:rod")
 
@@ -22,7 +22,7 @@ class ItemLightRod extends Item
       if (InvisibLights.blockLightSource.visibleFlag) InvisibLights.blockLightSource.visibleFlag = false
       else InvisibLights.blockLightSource.visibleFlag = true
 
-      Minecraft.getMinecraft.renderGlobal.loadRenderers
+      Minecraft.getMinecraft.renderGlobal.loadRenderers()
 
       world.playSound(player.posX + 0.5, player.posY + 0.5, player.posZ + 0.5, "random.orb", 1, if (InvisibLights.blockLightSource.visibleFlag) 1 else 0.9F, false)
     }

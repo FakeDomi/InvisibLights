@@ -1,9 +1,8 @@
-package de.domi1819.invisiblights
+package net.domi1819.invisiblights
 
 import cpw.mods.fml.common.Mod
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event.{FMLPreInitializationEvent, FMLInitializationEvent}
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
 import cpw.mods.fml.common.registry.GameRegistry
 
 import net.minecraft.init.{Blocks, Items}
@@ -25,7 +24,7 @@ object InvisibLights
   {
     val config = new Configuration(event.getSuggestedConfigurationFile)
 
-    config.load
+    config.load()
 
     val propGlowstoneMinCost = config.get("Tweaking", "GlowstoneMinCost", 1)
     propGlowstoneMinCost.comment = "The minimum amount of Glowstone Dust needed to place a Light Source"
@@ -43,7 +42,7 @@ object InvisibLights
     propDisableBlockDrops.comment = "When this is enabled, Light Sources don't drop anything on removal"
     disableBlockDrops = propDisableBlockDrops.getBoolean(false)
 
-    config.save
+    config.save()
   }
 
   @EventHandler

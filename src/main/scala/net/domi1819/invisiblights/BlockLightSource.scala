@@ -1,15 +1,14 @@
-package de.domi1819.invisiblights
+package net.domi1819.invisiblights
 
 import java.util.Random
 
-import net.minecraft.block.Block;
+import net.minecraft.block.Block
 import net.minecraft.block.material.Material
-import net.minecraft.client.renderer.texture.IIconRegister
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.init.{Blocks, Items}
+import net.minecraft.init.Items
 import net.minecraft.item.Item
-import net.minecraft.util.{Facing, AxisAlignedBB}
-import net.minecraft.world.{IBlockAccess, World};
+import net.minecraft.util.AxisAlignedBB
+import net.minecraft.world.{IBlockAccess, World}
 
 class BlockLightSource extends Block(Material.circuits)
 {
@@ -20,12 +19,13 @@ class BlockLightSource extends Block(Material.circuits)
   setCreativeTab(CreativeTabs.tabRedstone)
   setBlockName("blockLightSource")
   setBlockTextureName("invisiblights:light")
-  setBlockUnbreakable
+  setBlockUnbreakable()
 
   override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
   {
     setBlockBoundsBasedOnState(world, x, y, z)
-    if(visibleFlag) AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1) else AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0)
+    if(visibleFlag) AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
+    else AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0)
   }
 
   override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int)
