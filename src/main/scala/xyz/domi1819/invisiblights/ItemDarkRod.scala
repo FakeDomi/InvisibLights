@@ -1,4 +1,4 @@
-package net.domi1819.invisiblights
+package xyz.domi1819.invisiblights
 
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.entity.player.EntityPlayer

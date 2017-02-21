@@ -1,4 +1,4 @@
-package net.domi1819.invisiblights
+package xyz.domi1819.invisiblights
 
 import cpw.mods.fml.common.Mod
 import cpw.mods.fml.common.Mod.EventHandler
