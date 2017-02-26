@@ -10,8 +10,7 @@ import net.minecraft.item.Item
 import net.minecraft.util.AxisAlignedBB
 import net.minecraft.world.{IBlockAccess, World}
 
-class BlockLightSource extends Block(Material.circuits)
-{
+class BlockLightSource extends Block(Material.circuits) {
   var visibleFlag = false
   setHardness(0.1F)
   setResistance(0.1F)
@@ -21,21 +20,18 @@ class BlockLightSource extends Block(Material.circuits)
   setBlockTextureName("invisiblights:light")
   setBlockUnbreakable()
 
-  override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
-  {
+  override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB = {
     setBlockBoundsBasedOnState(world, x, y, z)
-    if(visibleFlag) AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
+    if (visibleFlag) AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
     else AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0)
   }
 
-  override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int)
-  {
+  override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
     if (visibleFlag) setBlockBounds(0, 0, 0, 1, 1, 1)
     else setBlockBounds(0, 0, 0, 0, 0, 0)
   }
 
-  override def getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
-  {
+  override def getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB = {
     setBlockBoundsBasedOnState(world, x, y, z)
     null
   }

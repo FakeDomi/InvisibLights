@@ -7,18 +7,15 @@ import net.minecraft.init.Items
 import net.minecraft.item.{ItemStack, Item}
 import net.minecraft.world.World
 
-class ItemLightRod extends Item
-{
+class ItemLightRod extends Item {
   setCreativeTab(CreativeTabs.tabTools)
   setMaxStackSize(1)
   setFull3D()
   setUnlocalizedName("itemLightRod")
   setTextureName("invisiblights:rod")
 
-  override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack =
-  {
-    if (player.isSneaking && world.isRemote)
-    {
+  override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
+    if (player.isSneaking && world.isRemote) {
       if (InvisibLights.blockLightSource.visibleFlag) InvisibLights.blockLightSource.visibleFlag = false
       else InvisibLights.blockLightSource.visibleFlag = true
 
@@ -30,10 +27,8 @@ class ItemLightRod extends Item
     stack
   }
 
-  override def onItemUseFirst(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean =
-  {
-    if (player.isSneaking)
-    {
+  override def onItemUseFirst(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
+    if (player.isSneaking) {
       onItemRightClick(stack, world, player)
       return true
     }
@@ -49,11 +44,9 @@ class ItemLightRod extends Item
     if (side == 4) aX = x - 1
     if (side == 5) aX = x + 1
 
-    if ((player.capabilities.isCreativeMode || getItemCount(player.inventory, Items.glowstone_dust) >= InvisibLights.glowstoneMinCost) && world.canPlaceEntityOnSide(InvisibLights.blockLightSource, aX, aY, aZ, false, side, player, stack))
-    {
+    if ((player.capabilities.isCreativeMode || getItemCount(player.inventory, Items.glowstone_dust) >= InvisibLights.glowstoneMinCost) && world.canPlaceEntityOnSide(InvisibLights.blockLightSource, aX, aY, aZ, false, side, player, stack)) {
       val meta = InvisibLights.blockLightSource.onBlockPlaced(world, aX, aY, aZ, side, hitX, hitY, hitZ, 0)
-      if (placeBlockAt(stack, player, world, aX, aY, aZ, hitX, hitY, hitZ, meta))
-      {
+      if (placeBlockAt(stack, player, world, aX, aY, aZ, hitX, hitY, hitZ, meta)) {
         world.playSoundEffect(aX + 0.5F, aY + 0.5F, aZ + 0.5F, InvisibLights.blockLightSource.stepSound.getBreakSound, 1, InvisibLights.blockLightSource.stepSound.getPitch * 0.8F)
         if (!player.capabilities.isCreativeMode) removeItems(player.inventory, Items.glowstone_dust, InvisibLights.glowstoneMaxCost)
         player.inventory.inventoryChanged
@@ -64,12 +57,10 @@ class ItemLightRod extends Item
     false
   }
 
-  def placeBlockAt(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, hitX: Float, hitY: Float, hitZ: Float, meta: Int): Boolean =
-  {
+  def placeBlockAt(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, hitX: Float, hitY: Float, hitZ: Float, meta: Int): Boolean = {
     if (!world.setBlock(x, y, z, InvisibLights.blockLightSource, meta, 3)) return false
 
-    if (world.getBlock(x, y, z) == InvisibLights.blockLightSource)
-    {
+    if (world.getBlock(x, y, z) == InvisibLights.blockLightSource) {
       InvisibLights.blockLightSource.onBlockPlacedBy(world, x, y, z, player, stack)
       InvisibLights.blockLightSource.onPostBlockPlaced(world, x, y, z, meta)
     }
@@ -77,8 +68,7 @@ class ItemLightRod extends Item
     true
   }
 
-  def getItemCount(inv: InventoryPlayer, item: Item): Int =
-  {
+  def getItemCount(inv: InventoryPlayer, item: Item): Int = {
     var count = 0
 
     for (stack <- inv.mainInventory)
@@ -87,27 +77,21 @@ class ItemLightRod extends Item
     count
   }
 
-  def removeItems(inv: InventoryPlayer, item: Item, count: Int)
-  {
+  def removeItems(inv: InventoryPlayer, item: Item, count: Int) {
     var itemsLeft = count
 
-    for (i <- 0 until inv.mainInventory.length)
-    {
+    for (i <- inv.mainInventory.indices) {
       val stack = inv.mainInventory(i)
-      if (itemsLeft > 0 && stack != null && stack.getItem == item)
-      {
-        if (itemsLeft == stack.stackSize)
-        {
+      if (itemsLeft > 0 && stack != null && stack.getItem == item) {
+        if (itemsLeft == stack.stackSize) {
           itemsLeft = 0
           inv.mainInventory(i) = null
         }
-        else if (itemsLeft < stack.stackSize)
-        {
+        else if (itemsLeft < stack.stackSize) {
           stack.stackSize -= itemsLeft
           itemsLeft = 0
         }
-        else
-        {
+        else {
           itemsLeft -= stack.stackSize
           inv.mainInventory(i) = null
         }

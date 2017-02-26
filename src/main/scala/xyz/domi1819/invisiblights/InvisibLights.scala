@@ -11,8 +11,7 @@ import net.minecraftforge.common.config.Configuration
 import net.minecraftforge.oredict.{OreDictionary, ShapedOreRecipe}
 
 @Mod(modid="InvisibLights", name="InvisibLights", version="2.3-7", modLanguage="scala")
-object InvisibLights
-{
+object InvisibLights {
   val blockLightSource = new BlockLightSource
   val itemLightRod = new ItemLightRod
   val itemDarkRod = new ItemDarkRod
@@ -20,8 +19,7 @@ object InvisibLights
   var (harderRecipes, disableBlockDrops) = (false, false)
 
   @EventHandler
-  def preInit(event: FMLPreInitializationEvent)
-  {
+  def preInit(event: FMLPreInitializationEvent) {
     val config = new Configuration(event.getSuggestedConfigurationFile)
 
     config.load()
@@ -46,23 +44,28 @@ object InvisibLights
   }
 
   @EventHandler
-  def init(event: FMLInitializationEvent)
-  {
+  def init(event: FMLInitializationEvent) {
     GameRegistry.registerBlock(blockLightSource, "blockLightSource")
     GameRegistry.registerItem(itemLightRod, "itemLightRod")
     GameRegistry.registerItem(itemDarkRod, "itemDarkRod")
 
     OreDictionary.registerOre("stickWood", Items.stick)
 
-    if (harderRecipes)
-    {
-      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLightRod), Array ("G", "S", "D", 'G', Blocks.glowstone, 'S', "stickWood", 'D', "blockDiamond") map { _.asInstanceOf[AnyRef] }: _*))
-      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemDarkRod), Array ("O", "S", "D", 'O', Blocks.obsidian, 'S', "stickWood", 'D', "gemDiamond") map { _.asInstanceOf[AnyRef] }: _*))
+    if (harderRecipes) {
+      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLightRod), Array("G", "S", "D", 'G', Blocks.glowstone, 'S', "stickWood", 'D', "blockDiamond") map {
+        _.asInstanceOf[AnyRef]
+      }: _*))
+      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemDarkRod), Array("O", "S", "D", 'O', Blocks.obsidian, 'S', "stickWood", 'D', "gemDiamond") map {
+        _.asInstanceOf[AnyRef]
+      }: _*))
     }
-    else
-    {
-      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLightRod), Array ("G", "S", "D", 'G', Blocks.glowstone, 'S', "stickWood", 'D', "gemDiamond") map { _.asInstanceOf[AnyRef] }: _*))
-      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemDarkRod), Array ("O", "S", 'O', Blocks.obsidian, 'S', "stickWood") map { _.asInstanceOf[AnyRef] }: _*))
+    else {
+      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLightRod), Array("G", "S", "D", 'G', Blocks.glowstone, 'S', "stickWood", 'D', "gemDiamond") map {
+        _.asInstanceOf[AnyRef]
+      }: _*))
+      GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemDarkRod), Array("O", "S", 'O', Blocks.obsidian, 'S', "stickWood") map {
+        _.asInstanceOf[AnyRef]
+      }: _*))
     }
   }
 }

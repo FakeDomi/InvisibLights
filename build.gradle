@@ -15,6 +15,7 @@ buildscript {
     }
 }
 
+apply plugin: 'scala'
 apply plugin: 'forge'
 
 version = "2.3-7"
