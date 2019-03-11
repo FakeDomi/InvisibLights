@@ -1,11 +1,11 @@
 [
 {
-  "modid": "InvisibLights",
+  "modid": "invisiblights",
   "name": "InvisibLights",
   "description": "Convenient invisible lights system for Minecraft.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://minecraft.curseforge.com/projects/invisiblights",
   "updateUrl": "",
   "authorList": ["domi1819"],
   "credits": "",

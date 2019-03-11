@@ -1,101 +1,82 @@
 package xyz.domi1819.invisiblights
 
+import scala.collection.JavaConverters._
+import net.minecraft.block.state.IBlockState
 import net.minecraft.client.Minecraft
 import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.{InventoryPlayer, EntityPlayer}
-import net.minecraft.init.Items
-import net.minecraft.item.{ItemStack, Item}
+import net.minecraft.entity.player.{EntityPlayer, InventoryPlayer}
+import net.minecraft.init.{Items, SoundEvents}
+import net.minecraft.item.{Item, ItemStack}
+import net.minecraft.util._
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 class ItemLightRod extends Item {
-  setCreativeTab(CreativeTabs.tabTools)
+  setCreativeTab(CreativeTabs.TOOLS)
   setMaxStackSize(1)
-  setFull3D()
-  setUnlocalizedName("itemLightRod")
-  setTextureName("invisiblights:rod")
+  setUnlocalizedName("invisiblights.light_rod")
 
-  override def onItemRightClick(stack: ItemStack, world: World, player: EntityPlayer): ItemStack = {
-    if (player.isSneaking && world.isRemote) {
-      if (InvisibLights.blockLightSource.visibleFlag) InvisibLights.blockLightSource.visibleFlag = false
-      else InvisibLights.blockLightSource.visibleFlag = true
-
+  override def onItemRightClick(world: World, player: EntityPlayer, hand: EnumHand): ActionResult[ItemStack] = {
+    if (world.isRemote && player.isSneaking) {
+      BlockLightSource.hidden = !BlockLightSource.hidden
       Minecraft.getMinecraft.renderGlobal.loadRenderers()
-
-      world.playSound(player.posX + 0.5, player.posY + 0.5, player.posZ + 0.5, "random.orb", 1, if (InvisibLights.blockLightSource.visibleFlag) 1 else 0.9F, false)
+      world.playSound(player.posX + 0.5, player.posY + 0.5, player.posZ + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, if (BlockLightSource.hidden) 0.9F else 1, false)
     }
 
-    stack
+    new ActionResult[ItemStack](EnumActionResult.SUCCESS, player.getHeldItem(hand))
   }
 
-  override def onItemUseFirst(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean = {
-    if (player.isSneaking) {
-      onItemRightClick(stack, world, player)
-      return true
+  override def onItemUseFirst(player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, hand: EnumHand): EnumActionResult = {
+    if (world.isRemote || player.isSneaking) {
+      return EnumActionResult.FAIL
     }
 
-    var aX = x
-    var aY = y
-    var aZ = z
+    val newPos = pos.offset(side)
+    val stack = player.getHeldItem(hand)
 
-    if (side == 0) aY = y - 1
-    if (side == 1) aY = y + 1
-    if (side == 2) aZ = z - 1
-    if (side == 3) aZ = z + 1
-    if (side == 4) aX = x - 1
-    if (side == 5) aX = x + 1
+    if ((player.isCreative || hasEnoughItems(player.inventory, Items.GLOWSTONE_DUST, GlowstoneCost))
+      && player.canPlayerEdit(newPos, side, stack) && world.mayPlace(BlockLightSource, newPos, false, side, player)) {
+      var state = BlockLightSource.getStateForPlacement(world, newPos, side, hitX, hitY, hitZ, 0, player, hand)
+      if (placeBlockAt(stack, player, world, newPos, side, hitX, hitY, hitZ, state)) {
+        state = world.getBlockState(newPos)
+        val soundType = state.getBlock.getSoundType(state, world, newPos, player)
+        world.playSound(null, newPos, soundType.getPlaceSound, SoundCategory.BLOCKS, (soundType.getVolume + 1) / 2, soundType.getPitch * 0.8F)
 
-    if ((player.capabilities.isCreativeMode || getItemCount(player.inventory, Items.glowstone_dust) >= InvisibLights.glowstoneMinCost) && world.canPlaceEntityOnSide(InvisibLights.blockLightSource, aX, aY, aZ, false, side, player, stack)) {
-      val meta = InvisibLights.blockLightSource.onBlockPlaced(world, aX, aY, aZ, side, hitX, hitY, hitZ, 0)
-      if (placeBlockAt(stack, player, world, aX, aY, aZ, hitX, hitY, hitZ, meta)) {
-        world.playSoundEffect(aX + 0.5F, aY + 0.5F, aZ + 0.5F, InvisibLights.blockLightSource.stepSound.getBreakSound, 1, InvisibLights.blockLightSource.stepSound.getPitch * 0.8F)
-        if (!player.capabilities.isCreativeMode) removeItems(player.inventory, Items.glowstone_dust, InvisibLights.glowstoneMaxCost)
-        player.inventory.inventoryChanged
-        if (!world.isRemote) return true
+        if (!player.isCreative && GlowstoneCost > 0) {
+          player.inventory.clearMatchingItems(Items.GLOWSTONE_DUST, 0, GlowstoneCost, null)
+        }
+
+        return EnumActionResult.SUCCESS
       }
     }
 
-    false
+    EnumActionResult.FAIL
   }
 
-  def placeBlockAt(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, hitX: Float, hitY: Float, hitZ: Float, meta: Int): Boolean = {
-    if (!world.setBlock(x, y, z, InvisibLights.blockLightSource, meta, 3)) return false
+  def placeBlockAt(stack: ItemStack, player: EntityPlayer, world: World, pos: BlockPos, side: EnumFacing, hitX: Float, hitY: Float, hitZ: Float, newState: IBlockState): Boolean = {
+    if (!world.setBlockState(pos, newState, 11)) return false
 
-    if (world.getBlock(x, y, z) == InvisibLights.blockLightSource) {
-      InvisibLights.blockLightSource.onBlockPlacedBy(world, x, y, z, player, stack)
-      InvisibLights.blockLightSource.onPostBlockPlaced(world, x, y, z, meta)
+    val state = world.getBlockState(pos)
+    if (state.getBlock == BlockLightSource) {
+      BlockLightSource.onBlockPlacedBy(world, pos, state, player, stack)
     }
 
     true
   }
 
-  def getItemCount(inv: InventoryPlayer, item: Item): Int = {
-    var count = 0
+  def hasEnoughItems(inv: InventoryPlayer, item: Item, count: Int): Boolean = {
+    if (count <= 0) return true
 
-    for (stack <- inv.mainInventory)
-      if (stack != null && stack.getItem == item) count += stack.stackSize
-
-    count
-  }
-
-  def removeItems(inv: InventoryPlayer, item: Item, count: Int) {
-    var itemsLeft = count
-
-    for (i <- inv.mainInventory.indices) {
-      val stack = inv.mainInventory(i)
-      if (itemsLeft > 0 && stack != null && stack.getItem == item) {
-        if (itemsLeft == stack.stackSize) {
-          itemsLeft = 0
-          inv.mainInventory(i) = null
-        }
-        else if (itemsLeft < stack.stackSize) {
-          stack.stackSize -= itemsLeft
-          itemsLeft = 0
-        }
-        else {
-          itemsLeft -= stack.stackSize
-          inv.mainInventory(i) = null
+    var invCount = 0
+    for (stack: ItemStack <- inv.mainInventory.iterator().asScala) {
+      if (stack != null && stack.getItem == item) {
+        invCount += stack.getCount
+        if (invCount >= count) {
+          return true
         }
       }
     }
+
+    false
   }
 }

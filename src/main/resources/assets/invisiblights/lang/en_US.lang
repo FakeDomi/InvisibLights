@@ -1,3 +1,2 @@
-tile.blockLightSource.name=Light Source
-item.itemLightRod.name=Rod of Light
-item.itemDarkRod.name=Rod of Darkness
+tile.invisiblights.light_source.name=Light Source
+item.invisiblights.light_rod.name=Rod of Light

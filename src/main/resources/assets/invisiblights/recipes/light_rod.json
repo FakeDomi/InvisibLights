@@ -1,0 +1,29 @@
+{
+  "result": {
+    "item": "invisiblights:light_rod"
+  },
+  "pattern": [
+    " ng",
+    " sn",
+    "d  "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "n": {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "glowstone"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "d": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    }
+  }
+}

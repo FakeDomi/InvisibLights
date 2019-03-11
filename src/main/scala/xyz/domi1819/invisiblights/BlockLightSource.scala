@@ -4,47 +4,45 @@ import java.util.Random
 
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
+import net.minecraft.block.state.{BlockStateContainer, IBlockState}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.init.Items
 import net.minecraft.item.Item
-import net.minecraft.util.AxisAlignedBB
+import net.minecraft.util.math.{AxisAlignedBB, BlockPos}
+import net.minecraft.util.{BlockRenderLayer, EnumFacing}
 import net.minecraft.world.{IBlockAccess, World}
 
-class BlockLightSource extends Block(Material.circuits) {
-  var visibleFlag = false
-  setHardness(0.1F)
-  setResistance(0.1F)
+class BlockLightSource extends Block(Material.CIRCUITS) {
+  setHardness(0.2F)
+  setResistance(0.2F)
   setLightLevel(1)
-  setCreativeTab(CreativeTabs.tabRedstone)
-  setBlockName("blockLightSource")
-  setBlockTextureName("invisiblights:light")
-  setBlockUnbreakable()
+  setCreativeTab(CreativeTabs.REDSTONE)
+  setUnlocalizedName("invisiblights.light_source")
 
-  override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB = {
-    setBlockBoundsBasedOnState(world, x, y, z)
-    if (visibleFlag) AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1)
-    else AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0)
+  var hidden = true
+
+  override def getItemDropped(state: IBlockState, random: Random, fortune: Int): Item = Items.GLOWSTONE_DUST
+  override def quantityDropped(rand: Random): Int = if (DisableBlockDrops) 0 else GlowstoneCost
+
+  override def isReplaceable(world: IBlockAccess, pos: BlockPos): Boolean = true
+
+  override def isOpaqueCube(state: IBlockState): Boolean = false
+  override def getBlockLayer: BlockRenderLayer = BlockRenderLayer.TRANSLUCENT
+  override def shouldSideBeRendered(state: IBlockState, world: IBlockAccess, pos: BlockPos, side: EnumFacing): Boolean = world.getBlockState(pos.offset(side)).getBlock != this
+
+  override def getSelectedBoundingBox(state: IBlockState, world: World, pos: BlockPos): AxisAlignedBB = {
+    if (hidden) HiddenAABB
+    else Block.FULL_BLOCK_AABB.offset(pos)
   }
 
-  override def setBlockBoundsBasedOnState(world: IBlockAccess, x: Int, y: Int, z: Int) {
-    if (visibleFlag) setBlockBounds(0, 0, 0, 1, 1, 1)
-    else setBlockBounds(0, 0, 0, 0, 0, 0)
+  override def getBoundingBox(state: IBlockState, source: IBlockAccess, pos: BlockPos): AxisAlignedBB = {
+    if (hidden) HiddenAABB
+    else Block.FULL_BLOCK_AABB
   }
 
-  override def getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB = {
-    setBlockBoundsBasedOnState(world, x, y, z)
-    null
-  }
+  override def getCollisionBoundingBox(state: IBlockState, world: IBlockAccess, pos: BlockPos): AxisAlignedBB = Block.NULL_AABB
 
-  override def isReplaceable(world: IBlockAccess, x: Int, y: Int, z: Int): Boolean = true
-
-  override def getItemDropped(i: Int, random: Random, j: Int): Item = Items.glowstone_dust
-
-  override def getRenderBlockPass: Int = 1
-
-  override def quantityDropped(rand: Random): Int = 0
-
-  override def isOpaqueCube: Boolean = false
-
-  override def shouldSideBeRendered(world: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean = world.getBlock(x, y, z) != this
+  override def createBlockState(): BlockStateContainer = new BlockStateContainer(this, PropertyHidden)
+  override def getMetaFromState(state: IBlockState): Int = 0
+  override def getActualState(state: IBlockState, worldIn: IBlockAccess, pos: BlockPos): IBlockState = state.withProperty(PropertyHidden, hidden: java.lang.Boolean)
 }
