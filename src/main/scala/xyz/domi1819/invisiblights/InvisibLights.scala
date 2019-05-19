@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation
 import net.minecraft.item.{Item, ItemBlock}
 import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
-import net.minecraftforge.common.config.Configuration
+import net.minecraftforge.common.config.{Configuration, Property}
 import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.{EventBusSubscriber, EventHandler}
@@ -22,17 +22,35 @@ object InvisibLights {
     val config = new Configuration(event.getSuggestedConfigurationFile)
     config.load()
 
-    val propGlowstoneCost = config.get("Tweaking", "GlowstoneMinCost", 2)
-    propGlowstoneCost.setComment("The amount of Glowstone Dust needed to place a Light Source. Set to 0 to make it free.")
-    GlowstoneCost = propGlowstoneCost.getInt(2)
+    GlowstoneCost = getConfigOption(config, "GlowstoneMinCost", GlowstoneCost, "The amount of Glowstone Dust needed to place a Light Source. Set to 0 to make it free.")
+    DisableBlockDrops = getConfigOption(config, "DisableBlockDrops", DisableBlockDrops, "When this is enabled, Light Sources don't drop anything on removal.")
 
-    val propDisableBlockDrops = config.get("Tweaking", "DisableBlockDrops", false)
-    propDisableBlockDrops.setComment("When this is enabled, Light Sources don't drop anything on removal")
-    DisableBlockDrops = propDisableBlockDrops.getBoolean(false)
+    PoweredLightRodCapacity = getConfigOption(config, "PoweredLightRodCapacity", PoweredLightRodCapacity, "How much Energy the powered Rod can hold.")
+    PoweredLightRodCost = getConfigOption(config, "PoweredLightRodCost", PoweredLightRodCost, "The Energy required to place a light source.")
 
     if (config.hasChanged) {
       config.save()
     }
+  }
+
+  def getConfigOption[T](config: Configuration, name: String, default: T, desc: String): T = {
+    var prop: Property = null
+    var value: T = default
+
+    default match {
+      case v: Int => {
+        prop = config.get("Tweaking", name, v)
+        value = prop.getInt(v).asInstanceOf[T]
+      }
+      case v: Boolean => {
+        prop = config.get("Tweaking", name, v)
+        value = prop.getBoolean(v).asInstanceOf[T]
+      }
+      case _ => throw new RuntimeException("Property Type not supported")
+    }
+
+    prop.setComment(desc)
+    value
   }
 
   @SubscribeEvent
@@ -45,6 +63,7 @@ object InvisibLights {
     val registry = event.getRegistry
     ItemBlockLightSource = register(new ItemBlock(BlockLightSource), registry, "light_source")
     ItemLightRod = register(new ItemLightRod, registry, "light_rod")
+    ItemLightRodPowered = register(new ItemPoweredLightRod, registry, "light_rod_powered")
   }
 
   def register[TInput <: TEntry, TEntry <: IForgeRegistryEntry.Impl[TEntry]](input: TInput, registry: IForgeRegistry[TEntry], name: String): TInput = {
@@ -57,5 +76,6 @@ object InvisibLights {
   def registerModels(event: ModelRegistryEvent) {
     ModelLoader.setCustomModelResourceLocation(ItemBlockLightSource, 0, new ModelResourceLocation(ItemBlockLightSource.getRegistryName, "normal"))
     ModelLoader.setCustomModelResourceLocation(ItemLightRod, 0, new ModelResourceLocation(ItemLightRod.getRegistryName, "normal"))
+    ModelLoader.setCustomModelResourceLocation(ItemLightRodPowered, 0, new ModelResourceLocation(ItemLightRodPowered.getRegistryName, "normal"))
   }
 }
