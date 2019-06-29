@@ -80,6 +80,8 @@ object InvisibLights {
     ModelLoader.setCustomModelResourceLocation(ItemBlockLightSource, 0, new ModelResourceLocation(ItemBlockLightSource.getRegistryName, "normal"))
     ModelLoader.setCustomModelResourceLocation(ItemLightRod, 0, new ModelResourceLocation(ItemLightRod.getRegistryName, "normal"))
     ModelLoader.setCustomModelResourceLocation(ItemLightRodPowered, 0, new ModelResourceLocation(ItemLightRodPowered.getRegistryName, "normal"))
-    ModelLoader.setCustomModelResourceLocation(ItemLightRodElectric, 0, new ModelResourceLocation(ItemLightRodElectric.getRegistryName, "normal"))
+    if(Loader.isModLoaded("ic2")){
+      ModelLoader.setCustomModelResourceLocation(ItemLightRodElectric, 0, new ModelResourceLocation(ItemLightRodElectric.getRegistryName, "normal"))
+    }
   }
 }
