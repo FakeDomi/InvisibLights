@@ -7,7 +7,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent
 import net.minecraftforge.client.model.ModelLoader
 import net.minecraftforge.common.config.{Configuration, Property}
 import net.minecraftforge.event.RegistryEvent
-import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.common.{Loader, Mod}
 import net.minecraftforge.fml.common.Mod.{EventBusSubscriber, EventHandler}
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -64,6 +64,9 @@ object InvisibLights {
     ItemBlockLightSource = register(new ItemBlock(BlockLightSource), registry, "light_source")
     ItemLightRod = register(new ItemLightRod, registry, "light_rod")
     ItemLightRodPowered = register(new ItemPoweredLightRod, registry, "light_rod_powered")
+    if(Loader.isModLoaded("ic2")){
+      ItemLightRodElectric = register(new ItemElectricLightRod, registry, "light_rod_electric")
+    }
   }
 
   def register[TInput <: TEntry, TEntry <: IForgeRegistryEntry.Impl[TEntry]](input: TInput, registry: IForgeRegistry[TEntry], name: String): TInput = {
@@ -77,5 +80,6 @@ object InvisibLights {
     ModelLoader.setCustomModelResourceLocation(ItemBlockLightSource, 0, new ModelResourceLocation(ItemBlockLightSource.getRegistryName, "normal"))
     ModelLoader.setCustomModelResourceLocation(ItemLightRod, 0, new ModelResourceLocation(ItemLightRod.getRegistryName, "normal"))
     ModelLoader.setCustomModelResourceLocation(ItemLightRodPowered, 0, new ModelResourceLocation(ItemLightRodPowered.getRegistryName, "normal"))
+    ModelLoader.setCustomModelResourceLocation(ItemLightRodElectric, 0, new ModelResourceLocation(ItemLightRodElectric.getRegistryName, "normal"))
   }
 }

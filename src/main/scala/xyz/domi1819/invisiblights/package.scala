@@ -13,6 +13,7 @@ package object invisiblights {
   var ItemBlockLightSource: Item = _
   var ItemLightRod: Item = _
   var ItemLightRodPowered: Item = _
+  var ItemLightRodElectric: Item = _
 
   var GlowstoneCost = 2
   var DisableBlockDrops = false

@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ic2-classic-spmod"
+    }
+  ],
+  "result": {
+    "item": "invisiblights:light_rod_electric"
+  },
+  "pattern": [
+    "  l",
+    " c ",
+    "b  "
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "l": {
+      "item": "invisiblights:light_rod",
+      "data": 0
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "circuitBasic"
+    },
+    "b": {
+      "item": "ic2:itembatre",
+      "data": 0
+    }
+  }
+}
