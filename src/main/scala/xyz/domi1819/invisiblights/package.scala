@@ -19,4 +19,7 @@ package object invisiblights {
 
   var PoweredLightRodCapacity = 2560000
   var PoweredLightRodCost = 10000
+
+  var ElectricLightRodCapacity = PoweredLightRodCapacity / 4
+  var ElectricLightRodCost = PoweredLightRodCost / 4
 }
