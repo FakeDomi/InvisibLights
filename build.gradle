@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "3.1-9"
+version = "3.2-10"
 group = "xyz.domi1819.invisiblights" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "invisiblights"
 
@@ -42,8 +42,7 @@ repositories {
 }
 
 dependencies {
-    deobfProvided "net.industrial-craft:industrialcraft-2:${ic2_version}:api"
-    runtime "net.industrial-craft:industrialcraft-2:${ic2_version}"
+    deobfCompile "net.industrial-craft:industrialcraft-2:${ic2_version}"
 }
 
 

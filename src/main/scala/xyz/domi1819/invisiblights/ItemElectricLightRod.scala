@@ -11,12 +11,12 @@ import net.minecraftforge.fml.common.Loader
 import net.minecraftforge.fml.common.Optional
 
 @Optional.Interface(iface = "ic2.api.item.IElectricItem", modid = "ic2", striprefs = true)
-class ItemElectricLightRod extends ItemLightRod with IElectricItem{
+class ItemElectricLightRod extends ItemLightRod with IElectricItem {
   setTranslationKey("invisiblights.light_rod_electric")
 
-  def isClassicLoaded(): Boolean = Loader.isModLoaded("ic2-classic-spmod")
+  def isClassicLoaded: Boolean = Loader.isModLoaded("ic2-classic-spmod")
 
-  override def showDurabilityBar(stack: ItemStack): Boolean = if (isClassicLoaded()) true else ElectricItem.manager.getCharge(stack) !=  this.getMaxCharge(stack)
+  override def showDurabilityBar(stack: ItemStack): Boolean = isClassicLoaded || ElectricItem.manager.getCharge(stack) != this.getMaxCharge(stack)
   override def getDurabilityForDisplay(stack: ItemStack): Double = 1D - ElectricItem.manager.getCharge(stack) / getMaxCharge(stack)
   override def getRGBDurabilityForDisplay(stack: ItemStack): Int = {
     val durability = getDurabilityForDisplay(stack)
@@ -25,10 +25,10 @@ class ItemElectricLightRod extends ItemLightRod with IElectricItem{
 
   override def getSubItems(tab: CreativeTabs, items: NonNullList[ItemStack]): Unit = {
     if (isInCreativeTab(tab)) {
-      val empty = new ItemStack(this, 1, 0)
-      val full = new ItemStack(this, 1, 0)
-      ElectricItem.manager.discharge(empty, 2.147483647E9D, 2147483647, true, false, false)
-      ElectricItem.manager.charge(full, 2.147483647E9D, 2147483647, true, false)
+      val empty = new ItemStack(this)
+      val full = new ItemStack(this)
+      ElectricItem.manager.discharge(empty, Double.MaxValue, Int.MaxValue, true, false, false)
+      ElectricItem.manager.charge(full, Double.MaxValue, Int.MaxValue, true, false)
       items.add(empty)
       items.add(full)
     }
@@ -42,7 +42,7 @@ class ItemElectricLightRod extends ItemLightRod with IElectricItem{
 
   //IElectricItem
   @Optional.Method(modid = "ic2")
-  override def canProvideEnergy(itemStack: ItemStack): Boolean = false;
+  override def canProvideEnergy(itemStack: ItemStack): Boolean = false
 
   @Optional.Method(modid = "ic2")
   override def getMaxCharge(itemStack: ItemStack): Double = ElectricLightRodCapacity
@@ -52,6 +52,4 @@ class ItemElectricLightRod extends ItemLightRod with IElectricItem{
 
   @Optional.Method(modid = "ic2")
   override def getTransferLimit(itemStack: ItemStack): Double = 200
-
-
 }
