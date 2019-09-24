@@ -1,0 +1,4 @@
+tile.invisiblights.light_source.name=Lichtquelle
+item.invisiblights.light_rod.name=Stab des Lichts
+item.invisiblights.light_rod_powered.name=Stab des Lichts (Energiebetrieben)
+tooltip.invisiblights.energy=Energie: %1$d/%2$d FE [%3$d%%]
