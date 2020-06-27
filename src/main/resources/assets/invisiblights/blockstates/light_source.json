@@ -1,27 +1,7 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "minecraft:cube_all",
-    "textures": {
-      "all": "invisiblights:blocks/light_source"
-    }
-  },
-  "variants": {
-    "normal": [
-    {}
-    ],
-    "hidden": {
-      "true": {
-        "model": "minecraft:block",
-        "textures": {
-          "particle": "invisiblights:blocks/transparent"
-        }
-      },
-      "false": {}
-    },
-    "powered": {
-      "true": {},
-      "false": {}
-    }
-  }
+	"variants": {
+		"": {
+			"model": "invisiblights:block/light_source"
+		}
+	}
 }
