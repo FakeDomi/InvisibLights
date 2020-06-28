@@ -1,12 +1,7 @@
 package re.domi.invisiblights;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.entity.EntityContext;
+import net.minecraft.block.*;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
@@ -19,7 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 
 @SuppressWarnings({"deprecation", "WeakerAccess"})
 public class LightSourceBlock extends Block implements Waterloggable
@@ -47,9 +42,9 @@ public class LightSourceBlock extends Block implements Waterloggable
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context)
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return LightSourcesHidden || view instanceof ServerWorld ? VoxelShapes.empty() : VoxelShapes.fullCube();
+        return LightSourcesHidden || world instanceof ServerWorld ? VoxelShapes.empty() : VoxelShapes.fullCube();
     }
 
     @Override
@@ -59,14 +54,14 @@ public class LightSourceBlock extends Block implements Waterloggable
     }
 
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos)
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom)
     {
         if (state.get(Properties.WATERLOGGED))
         {
             world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
-        return super.getStateForNeighborUpdate(state, facing, neighborState, world, pos, neighborPos);
+        return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
     }
 
     @Override
