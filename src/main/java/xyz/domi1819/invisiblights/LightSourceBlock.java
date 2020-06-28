@@ -5,8 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
@@ -33,7 +33,7 @@ public class LightSourceBlock extends Block implements IWaterLoggable {
     private final BlockItem blockItem;
 
     public LightSourceBlock() {
-        super(Properties.create(Material.MISCELLANEOUS, DyeColor.YELLOW).doesNotBlockMovement().hardnessAndResistance(0.2F).lightValue(15).sound(SoundType.CLOTH));
+        super(Properties.create(Material.MISCELLANEOUS, DyeColor.YELLOW).doesNotBlockMovement().hardnessAndResistance(0.2F).func_235838_a_(s -> 15).sound(SoundType.CLOTH));
         setRegistryName(InvisibLights.MOD_ID, "light_source");
         setDefaultState(getDefaultState().with(POWERED, false).with(WATERLOGGED, false));
         this.blockItem = new BlockItem(this, new Item.Properties().group(ItemGroup.DECORATIONS));
@@ -58,7 +58,7 @@ public class LightSourceBlock extends Block implements IWaterLoggable {
     }
 
     @Override
-    public IFluidState getFluidState(BlockState state) {
+    public FluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
