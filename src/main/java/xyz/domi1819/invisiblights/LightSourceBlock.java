@@ -2,28 +2,31 @@ package xyz.domi1819.invisiblights;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.IWaterLoggable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.Collections;
-import java.util.List;
+public class LightSourceBlock extends Block implements IWaterLoggable {
 
-public class LightSourceBlock extends Block {
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static boolean isHidden;
 
@@ -32,6 +35,7 @@ public class LightSourceBlock extends Block {
     public LightSourceBlock() {
         super(Properties.create(Material.MISCELLANEOUS, DyeColor.YELLOW).doesNotBlockMovement().hardnessAndResistance(0.2F).lightValue(15).sound(SoundType.CLOTH));
         setRegistryName(InvisibLights.MOD_ID, "light_source");
+        setDefaultState(getDefaultState().with(POWERED, false).with(WATERLOGGED, false));
         this.blockItem = new BlockItem(this, new Item.Properties().group(ItemGroup.DECORATIONS));
         this.blockItem.setRegistryName(InvisibLights.MOD_ID, "light_source");
     }
@@ -49,8 +53,13 @@ public class LightSourceBlock extends Block {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        return Collections.singletonList(new ItemStack(Items.GLOWSTONE_DUST, 2));
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(POWERED, WATERLOGGED);
+    }
+
+    @Override
+    public IFluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
     @Override
