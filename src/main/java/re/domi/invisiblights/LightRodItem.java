@@ -64,7 +64,7 @@ public class LightRodItem extends Item
         if ((player.isCreative() || this.canAffordLightSource(player.inventory, heldItemStack))
             && player.canPlaceOn(newPos, side, heldItemStack))
         {
-            BlockState state = getPlacementBlockState(lightSourceBlock.getDefaultState());
+            BlockState state = this.getPlacementBlockState(this.lightSourceBlock.getDefaultState());
             if (world.setBlockState(newPos, state, 11))
             {
                 BlockSoundGroup soundGroup = state.getBlock().getSoundGroup(state);
@@ -72,7 +72,7 @@ public class LightRodItem extends Item
 
                 if (!player.isCreative())
                 {
-                    postPlace(player.inventory, heldItemStack);
+                    this.postPlace(player.inventory, heldItemStack);
                 }
 
                 return ActionResult.SUCCESS;
