@@ -50,7 +50,7 @@ public class LightRodItem extends Item {
         if (player.isCrouching()) {
             if (world.isRemote) {
                 LightSourceBlock.setHidden(!LightSourceBlock.getHidden());
-                Minecraft.getInstance().worldRenderer.setWorldAndLoadRenderers((ClientWorld) world); // straightforward
+                Minecraft.getInstance().worldRenderer.loadRenderers();
                 world.playSound(player.getPosX() + 0.5, player.getPosY() + 0.5, player.getPosZ() + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, LightSourceBlock.getHidden() ? 0.9F : 1, false);
             }
             player.swing(hand, false);
