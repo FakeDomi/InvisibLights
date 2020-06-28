@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "invisiblights",
+  "version": "${version}",
+
+  "name": "InvisibLights",
+  "description": "Convenient invisible lights system for Minecraft.",
+  "authors": [
+    "Domi", "Rongmario"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/invisiblights",
+    "sources": "https://github.com/FakeDomi/InvisibLights"
+  },
+
+  "license": "MIT",
+  "icon": "assets/invisiblights/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "re.domi.invisiblights.InvisibLights"
+    ]
+  },
+  "mixins": [
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.14.4"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
