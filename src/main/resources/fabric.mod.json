@@ -10,7 +10,8 @@
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/invisiblights",
-    "sources": "https://github.com/FakeDomi/InvisibLights"
+    "sources": "https://github.com/FakeDomi/InvisibLights",
+    "issues": "https://github.com/FakeDomi/InvisibLights/issues"
   },
 
   "license": "MIT",
@@ -26,9 +27,9 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": "*",
-    "minecraft": "1.14.4"
+    "fabricloader": ">=0.8.2",
+    "fabric": ">=0.12.0",
+    "minecraft": "1.14.x"
   },
   "suggests": {
     "flamingo": "*"

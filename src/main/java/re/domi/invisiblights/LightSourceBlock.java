@@ -4,33 +4,34 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.EntityContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-
-import java.util.Collections;
-import java.util.List;
+import net.minecraft.world.IWorld;
 
 @SuppressWarnings({"deprecation", "WeakerAccess"})
-public class LightSourceBlock extends Block
+public class LightSourceBlock extends Block implements Waterloggable
 {
     public static final BooleanProperty POWERED = BooleanProperty.of("powered");
     public static boolean LightSourcesHidden = true;
 
     public LightSourceBlock()
     {
-        super(FabricBlockSettings.of(Material.AIR).hardness(0.2f).resistance(0.2f).lightLevel(15));
+        super(FabricBlockSettings.of(Material.AIR).hardness(0.2f).resistance(0.2f).lightLevel(15).collidable(false));
 
-        this.setDefaultState(this.getStateManager().getDefaultState().with(POWERED, false));
+        this.setDefaultState(this.getStateManager().getDefaultState().with(POWERED, false).with(Properties.WATERLOGGED, false));
     }
 
     @Override
@@ -54,24 +55,37 @@ public class LightSourceBlock extends Block
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context)
     {
-        return LightSourcesHidden ? VoxelShapes.empty() : VoxelShapes.fullCube();
+        return LightSourcesHidden || view instanceof ServerWorld ? VoxelShapes.empty() : VoxelShapes.fullCube();
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView view, BlockPos pos, EntityContext context)
+    public FluidState getFluidState(BlockState state)
     {
-        return VoxelShapes.empty();
+        return state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
     }
 
     @Override
-    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos)
     {
-        return state.get(POWERED) ? Collections.emptyList() : Collections.singletonList(new ItemStack(Items.GLOWSTONE_DUST, 2));
+        if (state.get(Properties.WATERLOGGED))
+        {
+            world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
+
+        return super.getStateForNeighborUpdate(state, facing, neighborState, world, pos, neighborPos);
+    }
+
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx)
+    {
+        //noinspection ConstantConditions
+        return super.getPlacementState(ctx).with(Properties.WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(POWERED);
+        builder.add(Properties.WATERLOGGED);
     }
 }

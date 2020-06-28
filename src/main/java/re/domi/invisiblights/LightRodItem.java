@@ -1,11 +1,12 @@
 package re.domi.invisiblights;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.*;
+import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -20,13 +21,9 @@ import net.minecraft.world.World;
 @SuppressWarnings("WeakerAccess")
 public class LightRodItem extends Item
 {
-    private Block lightSourceBlock;
-
-    public LightRodItem(Block lightSourceBlock)
+    public LightRodItem()
     {
         super(new Item.Settings().group(ItemGroup.TOOLS).maxCount(1));
-
-        this.lightSourceBlock = lightSourceBlock;
     }
 
     @Override
@@ -59,16 +56,31 @@ public class LightRodItem extends Item
 
         Direction side = context.getSide();
         BlockPos newPos = context.getBlockPos().offset(side);
-        ItemStack heldItemStack = player.getStackInHand(context.getHand());
+        Hand hand = context.getHand();
+        ItemStack heldItemStack = player.getStackInHand(hand);
 
         if ((player.isCreative() || this.canAffordLightSource(player.inventory, heldItemStack))
-            && player.canPlaceOn(newPos, side, heldItemStack))
+                && player.canPlaceOn(newPos, side, heldItemStack)
+                && world.getBlockState(newPos).canReplace(new ItemPlacementContext(context))
+                && world.getBlockState(newPos).getBlock() != InvisibLights.LightSource)
         {
-            BlockState state = this.getPlacementBlockState(this.lightSourceBlock.getDefaultState());
+            BlockState state = this.getPlacementBlockState(InvisibLights.LightSource.getPlacementState(new ItemPlacementContext(context)
+            {
+                private BlockPos realPos = newPos;
+
+                @Override
+                public BlockPos getBlockPos()
+                {
+                    return this.realPos;
+                }
+            }));
+
             if (world.setBlockState(newPos, state, 11))
             {
                 BlockSoundGroup soundGroup = state.getBlock().getSoundGroup(state);
                 world.playSound(null, newPos, soundGroup.getPlaceSound(), SoundCategory.BLOCKS, (soundGroup.volume + 1F) / 2F, soundGroup.pitch * 0.8F);
+
+                ((ServerWorld) world).getChunkManager().sendToNearbyPlayers(player, new EntityAnimationS2CPacket(player, hand == Hand.MAIN_HAND ? 0 : 3));
 
                 if (!player.isCreative())
                 {
