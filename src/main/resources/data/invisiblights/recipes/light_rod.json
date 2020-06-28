@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ng",
+    " sn",
+    "d  "
+  ],
+  "key": {
+    "n": {
+      "item": "minecraft:gold_nugget"
+    },
+    "g": {
+      "item": "minecraft:glowstone"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "invisiblights:light_rod"
+  }
+}

@@ -1,0 +1,43 @@
+ {
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "invisiblights:light_rod"
+    ]
+  },
+  "criteria": {
+    "has_glowstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:glowstone"
+          }
+        ]
+      }
+    },
+    "has_glowstone_dust": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:glowstone_dust"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "invisiblights:light_rod"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_glowstone",
+      "has_glowstone_dust",
+      "has_the_recipe"
+    ]
+  ]
+}
