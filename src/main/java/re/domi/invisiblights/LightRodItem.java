@@ -36,11 +36,9 @@ public class LightRodItem extends Item
 
             Vec3d pos = user.getPos();
             world.playSound(pos.x, pos.y, pos.z, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.8F, LightSourceBlock.LightSourcesHidden ? 0.9F : 1F, false);
-
-            return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));
         }
 
-        return new TypedActionResult<>(ActionResult.PASS, user.getStackInHand(hand));
+        return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));
     }
 
     @Override
