@@ -38,7 +38,7 @@ public class LightRodItem extends Item {
         BlockState state = world.getBlockState(pos);
         if (player.canPlayerEdit(pos, side, stack) && state.getMaterial().isReplaceable() && (player.isCreative() || this.canPlace(player))) {
             world.setBlockState(pos, InvisibLights.LIGHT_SOURCE.getDefaultState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
-            world.playSound(null, pos, state.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, 1, 0.9F);
+            world.playSound(null, pos, InvisibLights.LIGHT_SOURCE.getSoundType(state, world, pos, player).getPlaceSound(), SoundCategory.BLOCKS, 1, 0.9F);
             player.swing(context.getHand(), false);
             return ActionResultType.SUCCESS;
         }
