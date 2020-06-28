@@ -29,7 +29,7 @@ public class LightSourceBlock extends Block implements Waterloggable
 
     public LightSourceBlock()
     {
-        super(FabricBlockSettings.of(Material.AIR).hardness(0.2f).resistance(0.2f).lightLevel(15).collidable(false));
+        super(FabricBlockSettings.of(Material.AIR).hardness(0.2f).resistance(0.2f).lightLevel(15).collidable(false).nonOpaque());
 
         this.setDefaultState(this.getStateManager().getDefaultState().with(POWERED, false).with(Properties.WATERLOGGED, false));
     }
@@ -44,12 +44,6 @@ public class LightSourceBlock extends Block implements Waterloggable
     public boolean isSideInvisible(BlockState state, BlockState neighbor, Direction facing)
     {
         return LightSourcesHidden || neighbor.getBlock() == this;
-    }
-
-    @Override
-    public RenderLayer getRenderLayer()
-    {
-        return RenderLayer.TRANSLUCENT;
     }
 
     @Override
