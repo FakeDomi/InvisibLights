@@ -18,6 +18,7 @@ public class InvisibLights {
 
     public static final LightSourceBlock LIGHT_SOURCE = new LightSourceBlock();
     public static final LightRodItem LIGHT_ROD = new LightRodItem();
+    public static final PoweredLightRodItem POWERED_LIGHT_ROD = new PoweredLightRodItem();
 
     public InvisibLights() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -37,6 +38,7 @@ public class InvisibLights {
     private void onItemsRegister(final RegistryEvent.Register<Item> items) {
         items.getRegistry().register(LIGHT_SOURCE.getBlockItem());
         items.getRegistry().register(LIGHT_ROD);
+        items.getRegistry().register(POWERED_LIGHT_ROD);
     }
 
 }

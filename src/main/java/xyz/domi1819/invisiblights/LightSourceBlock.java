@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -20,9 +21,12 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+@SuppressWarnings("deprecation")
 public class LightSourceBlock extends Block implements IWaterLoggable {
 
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
@@ -58,6 +62,20 @@ public class LightSourceBlock extends Block implements IWaterLoggable {
     }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
+    public BlockState getStateForPlacement(BlockItemUseContext ctx) {
+        return super.getStateForPlacement(ctx).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getPos()).getFluid() == Fluids.WATER);
+    }
+
+    @Override
+    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos) {
+        if (state.get(WATERLOGGED)) {
+            world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
+        return super.updatePostPlacement(state, facing, neighborState, world, pos, neighborPos);
+    }
+
+    @Override
     public IFluidState getFluidState(BlockState state) {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
@@ -70,7 +88,7 @@ public class LightSourceBlock extends Block implements IWaterLoggable {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-        return isHidden ? VoxelShapes.empty() : VoxelShapes.fullCube();
+        return isHidden || world instanceof ServerWorld ? VoxelShapes.empty() : VoxelShapes.fullCube();
     }
 
     @Override

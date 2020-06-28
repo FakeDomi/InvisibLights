@@ -1,9 +1,10 @@
 package xyz.domi1819.invisiblights;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -17,32 +18,26 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 public class LightRodItem extends Item {
 
+    public LightRodItem(String name) {
+        super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
+        setRegistryName(InvisibLights.MOD_ID, name);
+    }
+
     public LightRodItem() {
-        super(new Properties().group(ItemGroup.TOOLS));
-        setRegistryName(InvisibLights.MOD_ID, "light_rod");
+        this("light_rod");
     }
 
     @Override
-    public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
-        PlayerEntity player = context.getPlayer();
-        World world = context.getWorld();
+    public ActionResultType onItemUse(ItemUseContext ctx) {
+        PlayerEntity player = ctx.getPlayer();
+        World world = ctx.getWorld();
         if (world.isRemote || player == null || player.isCrouching()) {
             return ActionResultType.PASS;
         }
-        Direction side = context.getFace();
-        BlockPos pos = context.getPos().offset(side);
-        BlockState state = world.getBlockState(pos);
-        if (player.canPlayerEdit(pos, side, stack) && state.getMaterial().isReplaceable() && (player.isCreative() || this.canPlace(player))) {
-            world.setBlockState(pos, InvisibLights.LIGHT_SOURCE.getDefaultState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
-            world.playSound(null, pos, InvisibLights.LIGHT_SOURCE.getSoundType(state, world, pos, player).getPlaceSound(), SoundCategory.BLOCKS, 1, 0.9F);
-            player.swing(context.getHand(), false);
-            return ActionResultType.SUCCESS;
-        }
-        return ActionResultType.PASS;
+        return place(ctx);
     }
 
     @Override
@@ -51,7 +46,7 @@ public class LightRodItem extends Item {
             if (world.isRemote) {
                 LightSourceBlock.setHidden(!LightSourceBlock.getHidden());
                 Minecraft.getInstance().worldRenderer.loadRenderers();
-                world.playSound(player.getPosX() + 0.5, player.getPosY() + 0.5, player.getPosZ() + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, LightSourceBlock.getHidden() ? 0.9F : 1, false);
+                world.playSound(player.getPosX() + 0.5, player.getPosY() + 0.5, player.getPosZ() + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.8F, LightSourceBlock.getHidden() ? 0.9F : 1, false);
             }
             player.swing(hand, false);
             return ActionResult.resultSuccess(player.getHeldItem(hand));
@@ -67,6 +62,32 @@ public class LightRodItem extends Item {
             }
         }
         return false;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private ActionResultType place(ItemUseContext ctx) {
+        PlayerEntity player = ctx.getPlayer();
+        BlockPos pos = ctx.getPos();
+        Direction side = ctx.getFace();
+        if (player.canPlayerEdit(pos, side, ctx.getItem()) && (player.isCreative() || this.canPlace(player))) {
+            World world = ctx.getWorld();
+            BlockState state = world.getBlockState(pos);
+            if (state.getBlock() != InvisibLights.LIGHT_SOURCE && state.isReplaceable(new BlockItemUseContext(ctx))) {
+                world.setBlockState(pos, InvisibLights.LIGHT_SOURCE.getDefaultState());
+            }
+            else {
+                BlockPos offset = pos.offset(side);
+                BlockState offsetState = world.getBlockState(offset);
+                if (offsetState.getBlock() != InvisibLights.LIGHT_SOURCE && offsetState.isReplaceable(new BlockItemUseContext(ctx))) {
+                    world.setBlockState(offset, InvisibLights.LIGHT_SOURCE.getDefaultState());
+                }
+            }
+            SoundType type = InvisibLights.LIGHT_SOURCE.getSoundType(state, world, pos, player);
+            world.playSound(null, pos, type.getPlaceSound(), SoundCategory.BLOCKS, (type.volume + 1F) / 2F, type.pitch * 0.8F);
+            player.swing(ctx.getHand(), false);
+            return ActionResultType.SUCCESS;
+        }
+        return ActionResultType.PASS;
     }
 
 }
