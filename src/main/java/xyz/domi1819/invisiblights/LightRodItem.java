@@ -30,7 +30,7 @@ public class LightRodItem extends Item {
     public ActionResultType onItemUseFirst(ItemStack stack, ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         World world = context.getWorld();
-        if (world.isRemote || player == null || player.isCrouching()) {
+        if (world.isRemote || player == null || player.isSneaking()) {
             return ActionResultType.PASS;
         }
         Direction side = context.getFace();
@@ -39,7 +39,7 @@ public class LightRodItem extends Item {
         if (player.canPlayerEdit(pos, side, stack) && state.getMaterial().isReplaceable() && (player.isCreative() || this.canPlace(player))) {
             world.setBlockState(pos, InvisibLights.LIGHT_SOURCE.getDefaultState(), Constants.BlockFlags.RERENDER_MAIN_THREAD);
             world.playSound(null, pos, InvisibLights.LIGHT_SOURCE.getSoundType(state, world, pos, player).getPlaceSound(), SoundCategory.BLOCKS, 1, 0.9F);
-            player.swing(context.getHand(), false);
+            player.swingArm(context.getHand());
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
@@ -47,16 +47,16 @@ public class LightRodItem extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        if (player.isCrouching()) {
+        if (player.isSneaking()) {
             if (world.isRemote) {
                 LightSourceBlock.setHidden(!LightSourceBlock.getHidden());
-                Minecraft.getInstance().worldRenderer.setWorldAndLoadRenderers((ClientWorld) world); // straightforward
-                world.playSound(player.getPosX() + 0.5, player.getPosY() + 0.5, player.getPosZ() + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, LightSourceBlock.getHidden() ? 0.9F : 1, false);
+                Minecraft.getInstance().worldRenderer.loadRenderers();
+                world.playSound(player.posX + 0.5, player.posY + 0.5, player.posZ + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, LightSourceBlock.getHidden() ? 0.9F : 1, false);
             }
-            player.swing(hand, false);
-            return ActionResult.resultSuccess(player.getHeldItem(hand));
+            player.swingArm(hand);
+            return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
         }
-        return ActionResult.resultPass(player.getHeldItem(hand));
+        return new ActionResult<>(ActionResultType.PASS, player.getHeldItem(hand));
     }
 
     private boolean canPlace(PlayerEntity player) {
