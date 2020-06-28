@@ -1,7 +1,6 @@
 package xyz.domi1819.invisiblights;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
