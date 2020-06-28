@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "invisiblights:blocks/light_source"
+    "all": "invisiblights:block/light_source"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "block.invisiblights.light_source": "Lichtquelle",
+  "item.invisiblights.light_rod": "Stab des Lichts",
+  "item.invisiblights.powered_light_rod": "Stab des Lichts (Energiebetrieben)",
+  "tooltip.invisiblights.energy": "Energie: %1$d/%2$d FE [%3$d%%]"
+}
