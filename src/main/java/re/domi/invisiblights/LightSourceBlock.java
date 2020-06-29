@@ -3,12 +3,10 @@ package re.domi.invisiblights;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.DyeColor;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -23,6 +21,8 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
+
 @SuppressWarnings({"deprecation", "WeakerAccess"})
 public class LightSourceBlock extends Block implements IWaterLoggable
 {
@@ -33,13 +33,13 @@ public class LightSourceBlock extends Block implements IWaterLoggable
 
     public LightSourceBlock()
     {
-        super(Properties.create(Material.MISCELLANEOUS, DyeColor.YELLOW).doesNotBlockMovement().hardnessAndResistance(0.2F).lightValue(15).sound(SoundType.CLOTH));
+        super(Properties.create(Material.AIR).hardnessAndResistance(0.2F).lightValue(15).doesNotBlockMovement());
         this.setDefaultState(this.getDefaultState().with(POWERED, false).with(WATERLOGGED, false));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    public float getAmbientOcclusionLightValue(BlockState state, @Nonnull IBlockReader world, @Nonnull BlockPos pos)
     {
         return 1.0F;
     }
@@ -51,6 +51,7 @@ public class LightSourceBlock extends Block implements IWaterLoggable
         return LightSourcesHidden || adjacentState.getBlock() == this;
     }
 
+    @Nonnull
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
     {
@@ -58,11 +59,19 @@ public class LightSourceBlock extends Block implements IWaterLoggable
     }
 
     @Override
+    public boolean propagatesSkylightDown(BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos)
+    {
+        return state.getFluidState().isEmpty();
+    }
+
+    @Nonnull
+    @Override
     public IFluidState getFluidState(BlockState state)
     {
         return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
+    @Nonnull
     @Override
     public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState neighborState, IWorld world, BlockPos pos, BlockPos neighborPos)
     {
@@ -74,8 +83,8 @@ public class LightSourceBlock extends Block implements IWaterLoggable
         return super.updatePostPlacement(state, facing, neighborState, world, pos, neighborPos);
     }
 
-    @Override
     @SuppressWarnings("ConstantConditions")
+    @Override
     public BlockState getStateForPlacement(BlockItemUseContext ctx)
     {
         return super.getStateForPlacement(ctx).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getPos()).getFluid() == Fluids.WATER);
@@ -85,11 +94,5 @@ public class LightSourceBlock extends Block implements IWaterLoggable
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(POWERED, WATERLOGGED);
-    }
-
-    @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos)
-    {
-        return true;
     }
 }

@@ -12,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nonnull;
+
 @SuppressWarnings("WeakerAccess")
 public class LightRodItem extends Item
 {
@@ -20,6 +22,7 @@ public class LightRodItem extends Item
         super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
     {
@@ -34,6 +37,7 @@ public class LightRodItem extends Item
         return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
     }
 
+    @Nonnull
     @Override
     public ActionResultType onItemUse(ItemUseContext ctx)
     {
@@ -59,6 +63,7 @@ public class LightRodItem extends Item
             {
                 private BlockPos realPos = newPos;
 
+                @Nonnull
                 @Override
                 public BlockPos getPos()
                 {

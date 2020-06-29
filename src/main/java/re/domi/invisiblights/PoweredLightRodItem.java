@@ -1,6 +1,5 @@
 package re.domi.invisiblights;
 
-
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,24 +8,18 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@SuppressWarnings("WeakerAccess")
 public class PoweredLightRodItem extends LightRodItem
 {
     @Override
@@ -38,34 +31,7 @@ public class PoweredLightRodItem extends LightRodItem
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt)
     {
-        return new ICapabilityProvider()
-        {
-            @Nonnull
-            @Override
-            public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-            {
-                if (cap == CapabilityEnergy.ENERGY)
-                {
-                    return LazyOptional.of(() -> new EnergyStorage(Config.PoweredLightRodCapacity, Integer.MAX_VALUE, 0, stack.getOrCreateTag().getInt("energy"))
-                    {
-                        @Override
-                        public int receiveEnergy(int maxReceive, boolean simulate)
-                        {
-                            int result = super.receiveEnergy(maxReceive, simulate);
-
-                            if (!simulate)
-                            {
-                                stack.getOrCreateTag().putInt("energy", this.energy);
-                            }
-
-                            return result;
-                        }
-                    }).cast();
-                }
-
-                return LazyOptional.empty();
-            }
-        };
+        return new PoweredItemCapabilityProvider(Config.PoweredLightRodCapacity, stack);
     }
 
     @Override
@@ -95,7 +61,7 @@ public class PoweredLightRodItem extends LightRodItem
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
+    public void fillItemGroup(@Nonnull ItemGroup group, @Nonnull NonNullList<ItemStack> items)
     {
         if (this.isInGroup(group))
         {
@@ -111,7 +77,7 @@ public class PoweredLightRodItem extends LightRodItem
     @Override
     public boolean canAffordLightSource(PlayerInventory inv, ItemStack heldItemStack)
     {
-        return heldItemStack.getOrCreateTag().getInt("energy") > Config.PoweredLightRodCost;
+        return heldItemStack.getOrCreateTag().getInt("energy") >= Config.PoweredLightRodCost;
     }
 
     @Override
