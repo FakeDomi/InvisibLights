@@ -36,8 +36,8 @@
 <section>Now the best part is you can make the light sources visible! To do that, sneak and right-click the rod of light. You'll hear a <em>ding</em> sound effect and should notice that all placed light sources have turned visible. You could break them now and even get your glowstone back.</section>
 <section>To make everything nicely hidden again, do another sneak right-click.</section>
 <section>&nbsp;</section>
-<section>You can even upgrade it to the powered version by attaching some redstone to it!</section>
-<section><img src="https://media.forgecdn.net/attachments/252/740/recipe_light_rod_powered.png" alt="" width="480" height="325" /></section>
+<section>You can also upgrade your rod to the powered version by attaching some redstone to it!</section>
+<section><img src="https://media.forgecdn.net/attachments/300/147/recipe_light_rod_powered.png" alt="" width="480" height="325" /></section>
 <section>&nbsp;</section>
 <section>The powered version can be charged in any Forge Energy compatible charger, and uses some of that energy to place light sources. Please note that the powered rod of light is only available in the Forge version at the moment.</section>
 <section>&nbsp;</section>
