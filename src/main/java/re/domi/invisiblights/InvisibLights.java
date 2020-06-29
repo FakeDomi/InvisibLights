@@ -8,6 +8,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+@SuppressWarnings("WeakerAccess")
 public class InvisibLights implements ModInitializer
 {
     public static Block LightSource;
