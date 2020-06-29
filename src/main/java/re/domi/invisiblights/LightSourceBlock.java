@@ -20,13 +20,14 @@ import net.minecraft.world.WorldAccess;
 public class LightSourceBlock extends Block implements Waterloggable
 {
     public static final BooleanProperty POWERED = BooleanProperty.of("powered");
+    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+
     public static boolean LightSourcesHidden = true;
 
     public LightSourceBlock()
     {
-        super(FabricBlockSettings.of(Material.AIR).hardness(0.2f).resistance(0.2f).lightLevel(15).collidable(false).nonOpaque());
-
-        this.setDefaultState(this.getStateManager().getDefaultState().with(POWERED, false).with(Properties.WATERLOGGED, false));
+        super(FabricBlockSettings.of(Material.AIR).hardness(0.2F).resistance(0.2F).lightLevel(15).noCollision());
+        this.setDefaultState(this.getStateManager().getDefaultState().with(POWERED, false).with(WATERLOGGED, false));
     }
 
     @Override
@@ -48,15 +49,21 @@ public class LightSourceBlock extends Block implements Waterloggable
     }
 
     @Override
+    public boolean isTranslucent(BlockState state, BlockView view, BlockPos pos)
+    {
+        return state.getFluidState().isEmpty();
+    }
+
+    @Override
     public FluidState getFluidState(BlockState state)
     {
-        return state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState newState, WorldAccess world, BlockPos pos, BlockPos posFrom)
     {
-        if (state.get(Properties.WATERLOGGED))
+        if (state.get(WATERLOGGED))
         {
             world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
@@ -64,17 +71,16 @@ public class LightSourceBlock extends Block implements Waterloggable
         return super.getStateForNeighborUpdate(state, direction, newState, world, pos, posFrom);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        //noinspection ConstantConditions
-        return super.getPlacementState(ctx).with(Properties.WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
+        return super.getPlacementState(ctx).with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
-        builder.add(POWERED);
-        builder.add(Properties.WATERLOGGED);
+        builder.add(POWERED, WATERLOGGED);
     }
 }
