@@ -23,7 +23,7 @@ public class LightRodItem extends Item
 {
     public LightRodItem()
     {
-        super(new Item.Settings().group(ItemGroup.TOOLS).maxCount(1));
+        super(new Settings().group(ItemGroup.TOOLS).maxCount(1));
     }
 
     @Override
