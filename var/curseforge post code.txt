@@ -1,12 +1,13 @@
 <section><strong>InvisibLights</strong></section>
-<section><span style="font-size: 10px;">I thought this day would never come but...</span></section>
-<section>This mod has finally been updated to 1.12! Version 1.13 <em>might</em> come at a later point.</section>
+<section><span style="font-size: 10px;">It's hard to believe this day has come again...</span></section>
+<section>Welcome to the latest update of this mod! It's now available for 1.14. And 1.15. And 1.16. For both Fabric and Forge.</section>
+<section>The main highlight of this update is the ability to create waterlogged light sources.</section>
 <section>&nbsp;</section>
 <section><strong>What is this mod all about?</strong></section>
-<section>You probably know that you need a lot of Torches to keep your house well-lit. You could also use Glowstone, but that is very bulky and doesn't look great either.</section>
-<section>As the title suggests this mod allows you to place light sources that are invisible. You won't even notice they are there!</section>
+<section>You probably know that you need a lot of torches to keep your house well lit. You might also try using glowstone, but then realize it doesn't look great either.</section>
+<section>As the mod name suggests, this mod allows you to place invisible light sources. You won't even notice they are there!</section>
 <section>&nbsp;</section>
-<section>You can turn this:</section>
+<section>You could turn this:</section>
 <section><img src="https://media.forgecdn.net/attachments/248/466/2019-03-11_20.png" alt="" width="1920" height="1080" /></section>
 <section>&nbsp;</section>
 <section>Into this:</section>
@@ -16,7 +17,7 @@
 <section><strong>Videos</strong></section>
 <section>In case you want to watch a video about this mod instead of reading the description, have some!</section>
 <section>Keep in mind they might show outdated content or mechanics.</section>
-<section>Feel free to produce a video yourself, I'll put here if you let me know.</section>
+<section>Feel free to produce a video yourself, I'll put it here if you let me know.</section>
 <section>&nbsp;</section>
 <section>https://www.youtube.com/watch?v=iU8cxGIbbyE</section>
 <section>(by BioMasterZap)</section>
@@ -26,22 +27,22 @@
 <section>&nbsp;</section>
 <section>&nbsp;</section>
 <section><strong>Content</strong></section>
-<section>This mod adds one item: the Rod of Light. (It also adds a block for technical reasons, but you don't have to worry about that one.)</section>
+<section>This mod adds one item: the Rod of Light. (It also adds a block for technical reasons, but you don't really have to worry about that.)</section>
 <section>&nbsp;</section>
-<section>Here's how to craft it:</section>
-<section><img src="https://media.forgecdn.net/attachments/248/465/recipe_light_rod.png" alt="" width="480" height="288" /></section>
+<section>Here's how to make one:</section>
+<section><img src="https://media.forgecdn.net/attachments/300/146/recipe_light_rod.png" alt="" width="480" height="288" /></section>
 <section>&nbsp;</section>
-<section>To place a light source, you need some Glowstone dust in your inventory (unless you are in creative mode). Hold the Rod into your main- or offhand and right-click on a block surface. Placing a light source consumes two Glowstone dust by default (config option).</section>
-<section>Now the best part is you can make the light sources visible! To do that, sneak and right-click the Rod of Light. You'll hear a <em>ding</em> sound effect and notice all placed light sources are visible now. You can break them while they can be seen, and even get your Glowstone back (also a config option).</section>
+<section>To place a light source, you'll need some glowstone dust in your inventory (unless you are in creative mode). Hold the rod in either your mainhand or offhand and right-click on a surface. Placing a light source consumes two glowstone dust.</section>
+<section>Now the best part is you can make the light sources visible! To do that, sneak and right-click the rod of light. You'll hear a <em>ding</em> sound effect and should notice that all placed light sources have turned visible. You could break them now and even get your glowstone back.</section>
 <section>To make everything nicely hidden again, do another sneak right-click.</section>
 <section>&nbsp;</section>
-<section>You can even upgrade it to the powered version by attaching some Redstone to it!</section>
+<section>You can even upgrade it to the powered version by attaching some redstone to it!</section>
 <section><img src="https://media.forgecdn.net/attachments/252/740/recipe_light_rod_powered.png" alt="" width="480" height="325" /></section>
 <section>&nbsp;</section>
-<section>The powered version can be charged in any Forge Energy compatible charger, and uses that power to place light sources instead of Glowstone.</section>
+<section>The powered version can be charged in any Forge Energy compatible charger, and uses some of that energy to place light sources. Please note that the powered rod of light is only available in the Forge version at the moment.</section>
 <section>&nbsp;</section>
 <section>Light sources hidden:</section>
-<section><img src="https://media.forgecdn.net/attachments/248/468/2019-03-11_20.png" width="1920" height="1080" /></section>
+<section><img src="https://media.forgecdn.net/attachments/248/468/2019-03-11_20.png" alt="" width="1920" height="1080" /></section>
 <section>&nbsp;</section>
 <section>Light sources visible:</section>
 <section><img src="https://media.forgecdn.net/attachments/248/469/2019-03-11_20.png" alt="" width="1920" height="1080" /></section>
