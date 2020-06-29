@@ -29,11 +29,11 @@ public class LightSourceBlock extends Block implements IWaterLoggable
     public static final BooleanProperty POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
-    public static boolean LightSourcesHidden;
+    public static boolean LightSourcesHidden = true;
 
     public LightSourceBlock()
     {
-        super(Properties.create(Material.AIR).hardnessAndResistance(0.2F).lightValue(15).doesNotBlockMovement());
+        super(Properties.create(Material.MISCELLANEOUS).hardnessAndResistance(0.2F).lightValue(15).doesNotBlockMovement());
         this.setDefaultState(this.getDefaultState().with(POWERED, false).with(WATERLOGGED, false));
     }
 
@@ -62,6 +62,12 @@ public class LightSourceBlock extends Block implements IWaterLoggable
     public boolean propagatesSkylightDown(BlockState state, @Nonnull IBlockReader reader, @Nonnull BlockPos pos)
     {
         return state.getFluidState().isEmpty();
+    }
+
+    @Override
+    public boolean isReplaceable(BlockState state, @Nonnull BlockItemUseContext useContext)
+    {
+        return true;
     }
 
     @Nonnull

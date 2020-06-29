@@ -15,7 +15,7 @@ apply plugin: 'maven-publish'
 
 version = '5.0'
 group = 're.domi.invisiblights' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'invisiblights'
+archivesBaseName = 'invisiblights-forge'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
