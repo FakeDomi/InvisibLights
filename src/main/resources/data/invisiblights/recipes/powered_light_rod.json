@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " rb",
+    " lr",
+    "d  "
+  ],
+  "key": {
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "b": {
+      "tag": "forge:storage_blocks/redstone"
+    },
+    "l": {
+      "item": "invisiblights:light_rod"
+    },
+    "d": {
+      "tag": "forge:gems/diamond"
+    }
+  },
+  "result": {
+    "item": "invisiblights:powered_light_rod"
+  }
+}

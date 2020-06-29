@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "invisiblights:item/light_rod"
+    "layer0": "invisiblights:item/powered_light_rod"
   }
 }

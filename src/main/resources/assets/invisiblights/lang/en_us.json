@@ -1,0 +1,6 @@
+{
+  "block.invisiblights.light_source": "Light Source",
+  "item.invisiblights.light_rod": "Rod of Light",
+  "item.invisiblights.powered_light_rod": "Rod of Light (Powered)",
+  "tooltip.invisiblights.energy": "Energy: %1$d/%2$d FE [%3$d%%]"
+}
