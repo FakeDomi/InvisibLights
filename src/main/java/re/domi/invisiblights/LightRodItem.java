@@ -15,15 +15,9 @@ import net.minecraft.world.server.ServerWorld;
 @SuppressWarnings("WeakerAccess")
 public class LightRodItem extends Item
 {
-    public LightRodItem(String name)
-    {
-        super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
-        this.setRegistryName(InvisibLights.MOD_ID, name);
-    }
-
     public LightRodItem()
     {
-        this("light_rod");
+        super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
     }
 
     @Override

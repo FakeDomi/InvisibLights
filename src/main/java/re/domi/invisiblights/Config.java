@@ -3,45 +3,58 @@ package re.domi.invisiblights;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.*;
+import net.minecraftforge.common.ForgeConfigSpec.Builder;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 
+@SuppressWarnings("WeakerAccess")
 public class Config
 {
     public static int PoweredLightRodCapacity;
     public static int PoweredLightRodCost;
 
-    public static class Forge
+    public static void load()
     {
-        public static ForgeConfigSpec ConfigSpec;
+        ForgeConfig conf = new ForgeConfig();
 
-        private static ConfigValue<Integer> PoweredLightRodCapacity;
-        private static ConfigValue<Integer> PoweredLightRodCost;
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, conf.configSpec);
+        conf.load(FMLPaths.CONFIGDIR.get().resolve("invisiblights-common.toml"));
 
-        static
+        PoweredLightRodCapacity = conf.poweredLightRodCapacity.get();
+        PoweredLightRodCost = conf.poweredLightRodCost.get();
+    }
+
+    private static class ForgeConfig
+    {
+        private ForgeConfigSpec configSpec;
+
+        private ConfigValue<Integer> poweredLightRodCapacity;
+        private ConfigValue<Integer> poweredLightRodCost;
+
+        private ForgeConfig()
         {
             Builder builder = new Builder();
 
             builder.push("general");
 
-            PoweredLightRodCapacity = builder.comment("How much Energy the powered Rod can hold.").define("PoweredLightRodCapacity", 2560000);
-            PoweredLightRodCost = builder.comment("The Energy required to place a light source.").define("PoweredLightRodCost", 10000);
+            this.poweredLightRodCapacity = builder.comment("How much Energy the powered Rod can hold.").define("PoweredLightRodCapacity", 2560000);
+            this.poweredLightRodCost = builder.comment("The Energy required to place a light source.").define("PoweredLightRodCost", 10000);
 
             builder.pop();
 
-            ConfigSpec = builder.build();
+            this.configSpec = builder.build();
         }
 
-        public static void load(ForgeConfigSpec spec, Path path)
+        private void load(Path path)
         {
             CommentedFileConfig config = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();
 
             config.load();
-            spec.setConfig(config);
-
-            Config.PoweredLightRodCapacity = PoweredLightRodCapacity.get();
-            Config.PoweredLightRodCost = PoweredLightRodCost.get();
+            this.configSpec.setConfig(config);
         }
     }
 }

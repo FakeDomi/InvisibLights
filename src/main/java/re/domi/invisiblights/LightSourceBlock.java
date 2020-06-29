@@ -7,11 +7,8 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.DyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
@@ -34,20 +31,10 @@ public class LightSourceBlock extends Block implements IWaterLoggable
 
     public static boolean LightSourcesHidden;
 
-    private final BlockItem blockItem;
-
     public LightSourceBlock()
     {
         super(Properties.create(Material.MISCELLANEOUS, DyeColor.YELLOW).doesNotBlockMovement().hardnessAndResistance(0.2F).lightValue(15).sound(SoundType.CLOTH));
-        this.setRegistryName(InvisibLights.MOD_ID, "light_source");
         this.setDefaultState(this.getDefaultState().with(POWERED, false).with(WATERLOGGED, false));
-        this.blockItem = new BlockItem(this, new Item.Properties().group(ItemGroup.DECORATIONS));
-        this.blockItem.setRegistryName(InvisibLights.MOD_ID, "light_source");
-    }
-
-    public BlockItem getBlockItem()
-    {
-        return this.blockItem;
     }
 
     @Override

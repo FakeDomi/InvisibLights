@@ -27,12 +27,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
-public class PoweredLightRodItem extends LightRodItem {
-
-    public PoweredLightRodItem() {
-        super("powered_light_rod");
-    }
-
+public class PoweredLightRodItem extends LightRodItem
+{
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
     {
@@ -50,7 +46,7 @@ public class PoweredLightRodItem extends LightRodItem {
             {
                 if (cap == CapabilityEnergy.ENERGY)
                 {
-                    return LazyOptional.of(() -> new EnergyStorage(Config.PoweredLightRodCapacity)
+                    return LazyOptional.of(() -> new EnergyStorage(Config.PoweredLightRodCapacity, Integer.MAX_VALUE, 0, stack.getOrCreateTag().getInt("energy"))
                     {
                         @Override
                         public int receiveEnergy(int maxReceive, boolean simulate)
@@ -66,6 +62,7 @@ public class PoweredLightRodItem extends LightRodItem {
                         }
                     }).cast();
                 }
+
                 return LazyOptional.empty();
             }
         };
@@ -94,7 +91,7 @@ public class PoweredLightRodItem extends LightRodItem {
     public int getRGBDurabilityForDisplay(ItemStack stack)
     {
         double durability = this.getDurabilityForDisplay(stack);
-        return MathHelper.rgb(255 - (int)(durability * 127), 221 - (int)(durability * 110), 119 - (int)(durability * 59));
+        return MathHelper.rgb(255 - (int) (durability * 127), 221 - (int) (durability * 110), 119 - (int) (durability * 59));
     }
 
     @Override
