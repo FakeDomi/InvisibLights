@@ -23,16 +23,17 @@
       "re.domi.invisiblights.InvisibLights"
     ],
     "client": [
-      "re.domi.invisiblights.InvisibLightsClient"
     ]
   },
   "mixins": [
+    "invisiblights.mixins.json"
   ],
+  "accessWidener": "invisiblights.accesswidener",
 
   "depends": {
-    "fabricloader": ">=0.8.2",
-    "fabric": ">=0.13.1",
-    "minecraft": "1.16.x"
+    "fabricloader": "*",
+    "fabric": "*",
+    "minecraft": ">=1.17"
   },
   "suggests": {
     "flamingo": "*"
