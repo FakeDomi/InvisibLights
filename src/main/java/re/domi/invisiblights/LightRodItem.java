@@ -1,7 +1,7 @@
 package re.domi.invisiblights;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.*;
@@ -9,10 +9,13 @@ import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 @SuppressWarnings("WeakerAccess")
@@ -24,12 +27,27 @@ public class LightRodItem extends Item
     }
 
     @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
+    {
+        if (world.isClient && user.isSneaking())
+        {
+            LightSourceBlock.LightSourcesHidden = !LightSourceBlock.LightSourcesHidden;
+            MinecraftClient.getInstance().worldRenderer.reload();
+
+            Vec3d pos = user.getPos();
+            world.playSound(pos.x, pos.y, pos.z, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.8F, LightSourceBlock.LightSourcesHidden ? 0.9F : 1F, false);
+        }
+
+        return new TypedActionResult<>(ActionResult.SUCCESS, user.getStackInHand(hand));
+    }
+
+    @Override
     public ActionResult useOnBlock(ItemUsageContext context)
     {
         World world = context.getWorld();
         PlayerEntity player = context.getPlayer();
 
-        if (world.isClient || player == null)
+        if (world.isClient || player == null || player.isSneaking())
         {
             return ActionResult.PASS;
         }
@@ -42,9 +60,9 @@ public class LightRodItem extends Item
         if ((player.isCreative() || this.canAffordLightSource(player.getInventory(), heldItemStack))
                 && player.canPlaceOn(newPos, side, heldItemStack)
                 && world.getBlockState(newPos).canReplace(new ItemPlacementContext(context))
-                && world.getBlockState(newPos).getBlock() != Blocks.LIGHT)
+                && world.getBlockState(newPos).getBlock() != InvisibLights.LightSource)
         {
-            BlockState state = this.getPlacementBlockState(Blocks.LIGHT.getPlacementState(new ItemPlacementContext(context)
+            BlockState state = this.getPlacementBlockState(InvisibLights.LightSource.getPlacementState(new ItemPlacementContext(context)
             {
                 private final BlockPos realPos = newPos;
 

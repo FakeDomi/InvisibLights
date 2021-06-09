@@ -23,12 +23,11 @@
       "re.domi.invisiblights.InvisibLights"
     ],
     "client": [
+      "re.domi.invisiblights.InvisibLightsClient"
     ]
   },
   "mixins": [
-    "invisiblights.mixins.json"
   ],
-  "accessWidener": "invisiblights.accesswidener",
 
   "depends": {
     "fabricloader": "*",
