@@ -4,11 +4,11 @@
   "package": "re.domi.invisiblights.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BlocksMixin",
+    "LightBlockMixin"
   ],
   "client": [
-    "ClientWorldMixin",
-    "LightBlockMixin",
-    "BlocksMixin"
+    "ClientWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
