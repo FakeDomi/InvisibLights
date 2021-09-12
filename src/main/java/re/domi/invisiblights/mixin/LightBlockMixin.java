@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.ActionResult;
@@ -23,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import re.domi.invisiblights.InvisibLights;
+import re.domi.invisiblights.LightRodItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class LightBlockMixin extends Block
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
-        if (context.isHolding(InvisibLights.LightRod))
+        if (context.isHolding(InvisibLights.LightRod) || context.isHolding(Items.GLOWSTONE_DUST))
         {
             cir.setReturnValue(VoxelShapes.fullCube());
         }
@@ -49,7 +51,8 @@ public class LightBlockMixin extends Block
     {
         if (player.getStackInHand(hand).getItem() == InvisibLights.LightRod)
         {
-            cir.setReturnValue(ActionResult.PASS);
+            InvisibLights.LightRod.useOnBlock(new ItemUsageContext(player, hand, hit));
+            cir.setReturnValue(ActionResult.SUCCESS);
         }
     }
 

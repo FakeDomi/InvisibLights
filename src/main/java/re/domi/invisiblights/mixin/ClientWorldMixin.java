@@ -3,6 +3,9 @@ package re.domi.invisiblights.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,9 +19,15 @@ public class ClientWorldMixin
     private void getBlockParticle(CallbackInfoReturnable<ClientWorld.BlockParticle> cir)
     {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player != null && (player.getMainHandStack().getItem() == InvisibLights.LightRod || player.getOffHandStack().getItem() == InvisibLights.LightRod))
+        if (player != null)
         {
-            cir.setReturnValue(ClientWorld.BlockParticle.LIGHT);
+            Item mainHandItem = player.getMainHandStack().getItem();
+            Item offHandItem = player.getOffHandStack().getItem();
+
+            if (mainHandItem == InvisibLights.LightRod || offHandItem == InvisibLights.LightRod || mainHandItem == Items.GLOWSTONE_DUST)
+            {
+                cir.setReturnValue(ClientWorld.BlockParticle.LIGHT);
+            }
         }
     }
 }
