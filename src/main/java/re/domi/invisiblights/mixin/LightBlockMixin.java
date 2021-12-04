@@ -60,7 +60,7 @@ public class LightBlockMixin extends Block
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
     {
-        List<ItemStack> drops = new ArrayList<ItemStack>(1);
+        List<ItemStack> drops = new ArrayList<>(1);
         drops.add(new ItemStack(Items.GLOWSTONE_DUST, InvisibLights.GLOWSTONE_COST));
         return drops;
     }
