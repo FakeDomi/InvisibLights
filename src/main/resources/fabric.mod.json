@@ -28,7 +28,6 @@
   "mixins": [
     "invisiblights.mixins.json"
   ],
-  "accessWidener": "invisiblights.accesswidener",
 
   "depends": {
     "fabricloader": "*",
