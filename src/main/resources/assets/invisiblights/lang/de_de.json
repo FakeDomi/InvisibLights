@@ -1,4 +1,11 @@
 {
   "block.invisiblights.light_source": "Lichtquelle",
-  "item.invisiblights.light_rod": "Stab des Lichts"
+  "item.invisiblights.light_rod": "Stab des Lichts",
+  "item.invisiblights.powered_light_rod": "Stab des Lichts (Energiebetrieben)",
+  "item.invisiblights.powered_light_rod.tooltip": "Energie: %1$d/%2$d E [%3$d%%]",
+  "options.invisiblights.place_vanilla_light_source_block": "Vanilla-Lichtquellen platzieren:",
+  "options.invisiblights.light_source_glowstone_cost": "Lichtquelle Glowstone-Kosten:",
+  "options.invisiblights.powered_light_rod_capacity": "E-Stab des Lichts Energiekapazität:",
+  "options.invisiblights.powered_light_rod_charge_rate": "E-Stab des Lichts Laderate:",
+  "options.invisiblights.powered_light_rod_source_cost": "E-Lichtquelle Kosten:"
 }

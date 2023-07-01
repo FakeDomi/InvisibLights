@@ -9,7 +9,7 @@
     "Domi", "Rongmario"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/invisiblights",
+    "homepage": "https://domi.re/mc-mods/lights",
     "sources": "https://github.com/FakeDomi/InvisibLights",
     "issues": "https://github.com/FakeDomi/InvisibLights/issues"
   },
@@ -23,6 +23,10 @@
       "re.domi.invisiblights.InvisibLights"
     ],
     "client": [
+      "re.domi.invisiblights.InvisibLightsClient"
+    ],
+    "modmenu": [
+      "re.domi.invisiblights.config.ModMenuImpl"
     ]
   },
   "mixins": [
@@ -30,11 +34,8 @@
   ],
 
   "depends": {
-    "fabricloader": "*",
-    "fabric": "*",
-    "minecraft": ">=1.17"
-  },
-  "suggests": {
-    "flamingo": "*"
+    "fabricloader": ">=0.9.0",
+    "fabric-api": "*",
+    "minecraft": ">=1.20"
   }
 }

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " rb",
+    " lr",
+    "d  "
+  ],
+  "key": {
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "b": {
+      "item": "minecraft:redstone_block"
+    },
+    "l": {
+      "item": "invisiblights:light_rod"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "invisiblights:powered_light_rod"
+  }
+}

@@ -1,4 +1,11 @@
 {
   "block.invisiblights.light_source": "Light Source",
-  "item.invisiblights.light_rod": "Rod of Light"
+  "item.invisiblights.light_rod": "Rod of Light",
+  "item.invisiblights.powered_light_rod": "Rod of Light (Powered)",
+  "item.invisiblights.powered_light_rod.tooltip": "Energy: %1$d/%2$d E [%3$d%%]",
+  "options.invisiblights.place_vanilla_light_source_block": "Place vanilla light source block:",
+  "options.invisiblights.light_source_glowstone_cost": "Light source glowstone cost:",
+  "options.invisiblights.powered_light_rod_capacity": "Powered light rod capacity:",
+  "options.invisiblights.powered_light_rod_charge_rate": "Powered light rod charge rate:",
+  "options.invisiblights.powered_light_rod_source_cost": "Powered light source cost:"
 }

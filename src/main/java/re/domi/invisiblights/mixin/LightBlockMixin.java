@@ -10,7 +10,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import re.domi.invisiblights.config.Config;
 import re.domi.invisiblights.InvisibLights;
-import re.domi.invisiblights.LightRodItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class LightBlockMixin extends Block
     @Inject(method = "getOutlineShape", at = @At("HEAD"), cancellable = true)
     private void getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context, CallbackInfoReturnable<VoxelShape> cir)
     {
-        if (context.isHolding(InvisibLights.LightRod) || context.isHolding(Items.GLOWSTONE_DUST))
+        if (context.isHolding(InvisibLights.LightRod) || context.isHolding(InvisibLights.PoweredLightRod) || context.isHolding(Items.GLOWSTONE_DUST))
         {
             cir.setReturnValue(VoxelShapes.fullCube());
         }
@@ -58,10 +58,10 @@ public class LightBlockMixin extends Block
 
     @SuppressWarnings("deprecation")
     @Override
-    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder)
     {
         List<ItemStack> drops = new ArrayList<>(1);
-        drops.add(new ItemStack(Items.GLOWSTONE_DUST, InvisibLights.GLOWSTONE_COST));
+        drops.add(new ItemStack(Items.GLOWSTONE_DUST, Config.LightSourceGlowstoneCost));
         return drops;
     }
 
