@@ -1,8 +1,8 @@
 package re.domi.invisiblights.config;
 
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.*;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
@@ -107,10 +107,10 @@ public class ConfigScreen extends Screen
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta)
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        this.renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
+        this.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
     }
 
     private Widget createTextWidget(Text text)

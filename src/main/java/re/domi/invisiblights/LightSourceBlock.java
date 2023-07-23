@@ -7,7 +7,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
@@ -27,7 +27,7 @@ public class LightSourceBlock extends Block implements Waterloggable
 {
     public LightSourceBlock()
     {
-        super(FabricBlockSettings.of().hardness(0.2F).resistance(0.2F).luminance(15).replaceable().noCollision());
+        super(FabricBlockSettings.of(Material.AIR).hardness(0.2F).resistance(0.2F).luminance(15).noCollision());
         this.setDefaultState(this.getStateManager().getDefaultState().with(InvisibLights.FROM_POWERED_ROD, false).with(Properties.WATERLOGGED, false));
     }
 
@@ -73,7 +73,7 @@ public class LightSourceBlock extends Block implements Waterloggable
     }
 
     @Override
-    public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder)
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
     {
         List<ItemStack> drops = new ArrayList<>(1);
 

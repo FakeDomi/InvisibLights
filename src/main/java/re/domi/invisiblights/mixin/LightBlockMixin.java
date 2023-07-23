@@ -10,7 +10,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
-import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import re.domi.invisiblights.config.Config;
 import re.domi.invisiblights.InvisibLights;
+import re.domi.invisiblights.config.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class LightBlockMixin extends Block
 
     @SuppressWarnings("deprecation")
     @Override
-    public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder)
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
     {
         List<ItemStack> drops = new ArrayList<>(1);
         drops.add(new ItemStack(Items.GLOWSTONE_DUST, Config.LightSourceGlowstoneCost));
