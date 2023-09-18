@@ -50,7 +50,7 @@ public class LightSourceBlock extends Block implements Waterloggable
     }
 
     @Override
-    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
+    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
     {
         return !state.get(Properties.WATERLOGGED);
     }
@@ -66,7 +66,7 @@ public class LightSourceBlock extends Block implements Waterloggable
     {
         if (state.get(Properties.WATERLOGGED))
         {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
 
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);

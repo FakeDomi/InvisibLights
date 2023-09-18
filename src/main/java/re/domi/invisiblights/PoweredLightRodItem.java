@@ -4,9 +4,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -84,5 +86,19 @@ public class PoweredLightRodItem extends LightRodItem implements SimpleEnergyIte
     public long getEnergyMaxOutput(ItemStack stack)
     {
         return 0;
+    }
+
+    @Override
+    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks)
+    {
+        if (this.isIn(group))
+        {
+            stacks.add(new ItemStack(this));
+
+            ItemStack fullyCharged = new ItemStack(this);
+            this.setStoredEnergy(fullyCharged, this.getEnergyCapacity(fullyCharged));
+
+            stacks.add(fullyCharged);
+        }
     }
 }
